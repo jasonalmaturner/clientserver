@@ -17,9 +17,10 @@ app.use(cors());
 
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function(){
-  app.listen(port, function() {
-    console.log('listening at ' + port)
-  });
+  console.log("connected db")
+});
+app.listen(port, function() {
+  console.log('listening at ' + port)
 });
 
 // APIs imma need:
