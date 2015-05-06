@@ -9,7 +9,8 @@
     "express": "~4.12.3",
     "express-session": "~1.11.1",
     "mandrill-api": "~1.0.45",
-    "mongoose": "~4.0.2"
+    "rethinkdb": "~2.0.0",
+    "request-promise": "~0.4.2"
   },
   "devDependencies": {},
   "scripts": {
