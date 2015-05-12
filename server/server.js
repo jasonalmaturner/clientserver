@@ -7,7 +7,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import session from 'express-session';
 import cors from 'cors';
-import * as surveyRequests from './controllers/surveyRequests';
+import * as customSurvey from './controllers/custom-survey';
 
 /*
  * Configuration
@@ -26,7 +26,8 @@ app.use(cors());
 /*
  * Routes
  */
-app.post('/api/save-survey/:userId', surveyRequests.saveSurvey)
+app.post('/api/save-survey/:userId', customSurvey.post)
+app.get('/api/save-survey/:userId', customSurvey.get);
 
 /*
  * Initialize
