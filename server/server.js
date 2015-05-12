@@ -2,21 +2,19 @@
  * Modules
  */
 
-import constObj from './assets/constants';
+import constObj from './configuration/constants';
 import express from 'express';
 import bodyParser from 'body-parser';
 import session from 'express-session';
 import cors from 'cors';
-import * as surveyRequests from './assets/surveyRequests';
-import dash from 'rethinkdbdash';
+import * as surveyRequests from './controllers/surveyRequests';
 
 /*
  * Configuration
  */
 
 var app = express(),
-  port = 9001,
-  r = dash({ db: 'nps_server' });
+  port = 9001;
 
 /*
  * Middleware
@@ -29,12 +27,6 @@ app.use(cors());
  * Routes
  */
 app.post('/api/save-survey/:userId', surveyRequests.saveSurvey)
-
-/*
-r.table('test').run().then(function(result){
-  console.log(result);
-});
-*/
 
 /*
  * Initialize

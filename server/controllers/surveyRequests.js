@@ -1,5 +1,5 @@
-import dash from 'rethinkdbdash';
-var r = dash({ db: 'nps_server' });
+import { r } from './../configuration/database.js';
+
 var surveyRequests = {};
 
 surveyRequests.saveSurvey = function(req, res){
