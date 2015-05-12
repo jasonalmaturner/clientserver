@@ -1,4 +1,5 @@
-var r = require('rethinkdb');
+import dash from 'rethinkdbdash';
+var r = dash();
 
 function saveSurvey(req, res){
   var survey = req.body;
