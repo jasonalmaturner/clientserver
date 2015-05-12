@@ -1,10 +1,13 @@
 import dash from 'rethinkdbdash';
-var r = dash();
+var r = dash({ db: 'nps_server' });
+var surveyRequests = {};
 
-function saveSurvey(req, res){
+surveyRequests.saveSurvey = function(req, res){
   var survey = req.body;
   survey.user = req.params.userId;
-  r.table('surveys').insert()
+  r.table('surveys').insert(survey).run().then(function(result, maybe){
+    console.log(result, maybe);
+  });
 }
 
-export { saveSurvey };
+module.exports = surveyRequests

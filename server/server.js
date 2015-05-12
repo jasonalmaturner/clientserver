@@ -16,10 +16,7 @@ import dash from 'rethinkdbdash';
 
 var app = express(),
   port = 9001,
-  r = dash({
-    pool: false,
-    cursor: true
-  });
+  r = dash({ db: 'nps_server' });
 
 /*
  * Middleware
@@ -31,11 +28,13 @@ app.use(cors());
 /*
  * Routes
  */
+app.post('/api/save-survey/:userId', surveyRequests.saveSurvey)
 
-// save survey template info (save company name, from name, reply email, top bar color, button color, img url, and timestamp)
-app.post('api/save-survey/:userId', surveyRequests.saveSurvey)
-
-
+/*
+r.table('test').run().then(function(result){
+  console.log(result);
+});
+*/
 
 /*
  * Initialize
