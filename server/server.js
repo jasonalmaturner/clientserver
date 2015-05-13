@@ -2,19 +2,31 @@
  * Modules
  */
 
-import constObj from './configuration/constants';
 import express from 'express';
 import bodyParser from 'body-parser';
 import session from 'express-session';
 import cors from 'cors';
-import * as customSurvey from './controllers/custom-survey';
+
 
 /*
  * Configuration
  */
 
+import { r } from './configuration/database.js';
+import constObj from './configuration/constants';
+
 var app = express(),
   port = 9001;
+
+
+/*
+ * Controllers
+ */
+
+import * as custom from './controllers/custom';
+import * as survey from './controllers/survey';
+import * as respond from './controllers/respond';
+
 
 /*
  * Middleware
@@ -23,11 +35,24 @@ var app = express(),
 app.use(bodyParser.json());
 app.use(cors());
 
+
 /*
  * Routes
  */
-app.post('/api/save-survey/:userId', customSurvey.post)
-app.get('/api/save-survey/:userId', customSurvey.get);
+
+// Custom Surveys
+app.post('/api/save-survey/:userId', custom.save);
+app.get('/api/save-survey/:userId', custom.get);
+
+// Receive Responses
+//app.post('/api/respond/score', respond.score);
+//app.post('/api/respond/feedback', respond.feedback);
+
+// Send Survey
+app.post('/api/survey', survey.send);
+// r.tableCreate('survey').run();
+
+
 
 /*
  * Initialize

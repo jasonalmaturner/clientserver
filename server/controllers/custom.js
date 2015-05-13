@@ -1,9 +1,9 @@
 import { r } from './../configuration/database.js';
-import { save, get } from './../services/custom-survey.js';
+import { save, get } from './../services/custom-service.js';
 
 var surveyRequests = {};
 
-surveyRequests.post = function(req, res){
+surveyRequests.save = function(req, res){
   var survey = req.body;
   survey.user = req.params.userId;
   save(survey).then(function(results){

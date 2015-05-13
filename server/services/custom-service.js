@@ -12,37 +12,12 @@ var defaultSettings = {
   }
 };
 
-
-
-/*
-function create(survey){
-  return r.table('surveys').insert(survey).run();
-};
+var customSurveys = r.table('custom_surveys');
 
 function save(survey){
   var dfd = q.defer();
-  return r.table('surveys')
-  .filter({ user: survey.user })
-  .update(survey)
-  .run()
-  .then(function(results){
-    console.log(results);
-    if(results.replaced || results.unchanged) return dfd.resolve(results);
-    else return create(survey);
-  })
-  .then(function(results){
-    console.log(results);
-    dfd.resolve(results);
-  });
-  return dfd.promise;
-}
-*/
-
-function save(survey){
-  console.log(survey);
-  var dfd = q.defer();
-  r.table('surveys')
-   .insert(survey, { returnChanges: true, conflict: "update" })
+  customSurveys
+    .insert(survey, { returnChanges: true, conflict: "update" })
    .run()
    .then(function(results){
      return dfd.resolve(results.changes[0].new_val);
@@ -52,11 +27,10 @@ function save(survey){
 
 function get(id){
   var dfd = q.defer();
-  r.table('surveys')
+  customSurveys
   .filter({ user: id })
   .run()
   .then(function(results){
-    console.log(results.length);
     // If they exist, resolve
     if(results.length){
       return dfd.resolve(results[0]);
@@ -71,7 +45,6 @@ function get(id){
   })
   .then(function(results){
     // then return the results of creating it
-    console.log(results);
     return dfd.resolve(results);
   });
   return dfd.promise;
