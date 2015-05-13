@@ -1,24 +1,19 @@
 import q from 'q';
-import axios from 'axios';
-import { CS_BASE_URL } from './../configuration/constants';
+import { getClients, getContacts } from './cs-service';
 
 function save(obj){
   var dfd = q.defer();
   console.log(obj);
 
-  var reqUrl = `${CS_BASE_URL}/api/client/summarylist?access_token=${obj.access_token}`;
-  console.log(reqUrl);
-  axios({
-    method: 'GET',
-    url: reqUrl
-  })
-  .then(function(response){
-    console.log(response);
-  })
-  .catch(function(response){
-    console.log(response);
-  });
-
+  getClients(obj)
+    .then(function(results){
+      return getContacts(results);
+    })
+    .catch(function(err){
+      console.log(err);
+      res.status(500).json(err);
+    });
+  
 
   return dfd.promise;
 };
