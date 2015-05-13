@@ -3,11 +3,24 @@ import { getClients, getContacts } from './cs-service';
 
 function save(obj){
   var dfd = q.defer();
-  console.log(obj);
+  var clients = [];
+  var contacts = [];
+
 
   getClients(obj)
     .then(function(results){
-      return getContacts(results);
+      var promiseArray = results.map(function(item, index){
+        return getContacts({ id: item.id, access_token: obj.access_token });
+      });
+      return q.all(promiseArray);
+    })
+    .then(function(results){
+      results = results.reduce(function(prev, next){
+        return prev.concat(next.reduce(function(prev, next){
+          return prev.concat(next);
+        }, []));
+      }, []);
+      
     })
     .catch(function(err){
       console.log(err);
