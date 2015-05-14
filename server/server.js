@@ -6,7 +6,8 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import session from 'express-session';
 import cors from 'cors';
-
+import https from 'https';
+import fs from 'fs';
 
 /*
  * Configuration
@@ -16,6 +17,11 @@ import { r } from './configuration/database.js';
 import constObj from './configuration/constants';
 
 var app = express(),
+  credentials = {
+    key: fs.readFileSync('server/server_cert/key.pem', 'utf8'),
+    cert: fs.readFileSync('server/server_cert/cert.pem', 'utf8')
+  },
+  server = https.createServer(credentials, app),
   port = 9001;
 
 
@@ -53,12 +59,15 @@ app.post('/api/survey', survey.send);
 // r.tableCreate('survey').run();
 
 
+app.get('/api/test', function(req, res){
+  res.send('Now working');
+});
 
 /*
  * Initialize
  */
 
-app.listen(port, function() {
+server.listen(port, function() {
   console.log('listening at ' + port)
 });
 
