@@ -1,6 +1,7 @@
 import q from 'q';
 import { getClients, getContacts } from './cs-service';
 import { sendSurvey } from './email-service';
+import { r } from './../configuration/database.js';
 
 function send(obj){
   var dfd = q.defer();
@@ -8,7 +9,11 @@ function send(obj){
     tenant_id: obj.tenant_id,
     date: new Date(),
     clients: []
-  };
+  }
+  var response = {
+    emails: [],
+    survey: {}
+  }
 
   getClients(obj)
     .then(function(results){
@@ -34,17 +39,33 @@ function send(obj){
         });
         survey.clients[index].contacts = item;
       });
-      /*
-       * I'm sending the emails here, but I want to 
-       * Create the survey before sending the emails.
-       */
+      return _saveSurvey(survey);
+    })
+    .then(function(results){
+      // After saving survey to db
+      response.survey = results;
       var promiseArray = survey.clients.map(function(item, index){
         return sendSurvey({ contacts: item.contacts, client_id: item.client_id }); 
       });
       return q.all(promiseArray);
     })
     .then(function(results){
-      dfd.resolve(results);
+      var success = [];
+      var errors = [];
+      results.forEach(function(item, index){
+        item.success.forEach(function(item, index){
+          success.push(item.contact_id);
+        });
+        item.errors.forEach(function(item, index){
+          errors.push(item.contact_id);
+        });
+      });
+      response.emails = {
+        success: success,
+        errors: errors
+      };
+      // Done
+      dfd.resolve(response);
     })
     .catch(function(err){
       console.log(err);
@@ -55,6 +76,24 @@ function send(obj){
   return dfd.promise;
 };
 
+
+function _saveSurvey(survey){
+  var dfd = q.defer();
+  var surveys = r.table('surveys');
+    if(
+      !typeof survey === 'object' ||
+      !survey.tenant_id ||
+      !survey.date ||
+      !survey.clients ||
+      !survey.clients.length
+    ) dfd.reject(new Error('Survey does not follow data model'));
+    else {
+      surveys.insert(survey).run().then(function(results){
+        dfd.resolve(results);
+      });
+    }
+  return dfd.promise;
+};
 
 /*
  

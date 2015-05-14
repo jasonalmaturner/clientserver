@@ -19,8 +19,6 @@ function send(req, res){
   
   survey.send(obj)
     .then(function(results){
-      console.log(results);
-      // format this
       res.json(results);
     })
     .catch(function(err){

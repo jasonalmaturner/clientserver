@@ -56,7 +56,6 @@ app.get('/api/save-survey/:userId', custom.get);
 
 // Send Survey
 app.post('/api/survey', survey.send);
-// r.tableCreate('survey').run();
 
 
 app.get('/api/test', function(req, res){
