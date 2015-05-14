@@ -17,9 +17,15 @@ function send(req, res){
    clients: req.body
   }
   
-  survey.save(obj)
+  survey.send(obj)
     .then(function(results){
       console.log(results);
+      // format this
+      res.json(results);
+    })
+    .catch(function(err){
+      console.log(err);
+      res.status(500).json(err);
     });
 }
 
