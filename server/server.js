@@ -51,8 +51,8 @@ app.post('/api/save-survey/:userId', custom.save);
 app.get('/api/save-survey/:userId', custom.get);
 
 // Receive Responses
-//app.post('/api/respond/score', respond.score);
-//app.post('/api/respond/feedback', respond.feedback);
+app.get('/api/respond/score', respond.score);
+app.get('/api/respond/feedback', respond.feedback);
 
 // Send Survey
 app.post('/api/survey', survey.send);

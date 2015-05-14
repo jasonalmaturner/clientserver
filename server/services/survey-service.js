@@ -3,6 +3,8 @@ import { getClients, getContacts } from './cs-service';
 import { sendSurvey } from './email-service';
 import { r } from './../configuration/database.js';
 
+var surveys = r.table('surveys');
+
 function send(obj){
   var dfd = q.defer();
   var survey = {
@@ -79,7 +81,6 @@ function send(obj){
 
 function _saveSurvey(survey){
   var dfd = q.defer();
-  var surveys = r.table('surveys');
     if(
       !typeof survey === 'object' ||
       !survey.tenant_id ||
@@ -92,6 +93,32 @@ function _saveSurvey(survey){
         dfd.resolve(results);
       });
     }
+  return dfd.promise;
+};
+
+function saveScore(obj){
+  var dfd = q.defer();
+  var latestSurvey =   surveys.filter({ tenant_id: obj.tenant_id }).max('date')
+
+  latestSurvey
+    .pluck({ clients: 'contacts' })
+    .run()
+    .then(results => {
+      results.clients.forEach((item, outerIndex) => {
+        item.contacts.forEach((item, index, array) => {
+          if(Number(item.contact_id) === Number(obj.contact_id)) {
+            array[index].score = obj.score;
+            console.log(outerIndex, index);
+          }
+        });
+      });
+      latestSurvey
+        .update(results)
+        .run()
+        .then(results =>{
+          console.log(results);
+        });
+    })
   return dfd.promise;
 };
 
@@ -111,4 +138,4 @@ function _saveSurvey(survey){
     }]
 */ 
 
-export { send };
+export { send, saveScore };
