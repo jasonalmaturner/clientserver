@@ -32,7 +32,8 @@ import constObj from './configuration/constants';
 import * as custom from './controllers/custom';
 import * as survey from './controllers/survey';
 import * as respond from './controllers/respond';
-
+import * as data from './controllers/data';
+import { checkToken } from './configuration/middleware';
 
 /*
  * Middleware
@@ -40,7 +41,7 @@ import * as respond from './controllers/respond';
 
 app.use(bodyParser.json());
 app.use(cors());
-
+// app.use(checkToken);
 
 /*
  * Routes
@@ -56,11 +57,11 @@ app.post('/api/respond/feedback', respond.feedback);
 
 // Send Survey
 app.post('/api/survey', survey.send);
-// r.tableCreate('survey').run();
 
-app.get('/api/test', function(req, res){
-  res.send('it worked!');
-});
+// Get Data
+app.get('/api/results/client', data.client);
+app.get('/api/results/total', data.total);
+
 
 /*
  * Initialize

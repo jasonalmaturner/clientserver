@@ -101,19 +101,18 @@ function saveScore(obj){
   var survey = surveys.get(obj.survey_id);
   
   survey 
-    .pluck({ clients: 'contacts' })
+    .pluck( 'clients' )
     .run()
     .then(results => {
-      
+    
       results.clients.forEach((item, outerIndex) => {
         item.contacts.forEach((item, index, array) => {
           if(Number(item.contact_id) === Number(obj.contact_id)) {
             array[index].score = obj.score;
-            console.log(outerIndex, index);
           }
         });
       });
-      
+
       return survey.update(results).run()
     })
     .then(results => dfd.resolve(results))
@@ -128,7 +127,7 @@ function saveFeedback(obj){
   var survey = surveys.get(obj.survey_id);
   
   survey 
-    .pluck({ clients: 'contacts' })
+    .pluck('clients')
     .run()
     .then(results => {
       
