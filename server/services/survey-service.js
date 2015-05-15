@@ -98,9 +98,25 @@ function _saveSurvey(survey){
 
 function saveScore(obj){
   var dfd = q.defer();
-  var latestSurvey =   surveys.filter({ tenant_id: obj.tenant_id }).max('date')
+  var survey = surveys.get(obj.survey_id);
+  /*
+  survey
+    .update({ clients:  })
+  */
+  /*
+  survey('clients')('contacts')
+    .filter(contact => contact('contact_id').match(obj.contact_id))
+    .run()
+    .then(results => {
+      console.log(results);
+    })
+  */
 
-  latestSurvey
+  
+  // var latestSurvey =   surveys.filter({ tenant_id: obj.tenant_id }).max('date')
+
+  //latestSurvey
+  survey 
     .pluck({ clients: 'contacts' })
     .run()
     .then(results => {
@@ -112,7 +128,7 @@ function saveScore(obj){
           }
         });
       });
-      latestSurvey
+      survey
         .update(results)
         .run()
         .then(results =>{

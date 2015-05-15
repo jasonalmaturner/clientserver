@@ -7,6 +7,7 @@ function send(req, res){
   if(
       !req.query.access_token || 
       !req.query.tenant_id || 
+      !req.query.survey_id ||
       !Array.isArray(req.body) || 
       req.body.length < 1
   ) { return res.status(400).send('Insufficient parameters for request') };

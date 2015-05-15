@@ -16,13 +16,13 @@ import fs from 'fs';
 import { r } from './configuration/database.js';
 import constObj from './configuration/constants';
 
-var app = express(),
-  credentials = {
-    key: fs.readFileSync('server/server_cert/key.pem', 'utf8'),
-    cert: fs.readFileSync('server/server_cert/cert.pem', 'utf8')
-  },
-  server = https.createServer(credentials, app),
-  port = 9001;
+ var app = express(),
+     credentials = {
+       key: fs.readFileSync('server/server_cert/key.pem', 'utf8'),
+       cert: fs.readFileSync('server/server_cert/cert.pem', 'utf8')
+     },
+     server = https.createServer(credentials, app),
+     port = 9001;
 
 
 /*
@@ -56,10 +56,10 @@ app.get('/api/respond/feedback', respond.feedback);
 
 // Send Survey
 app.post('/api/survey', survey.send);
-
+// r.tableCreate('survey').run();
 
 app.get('/api/test', function(req, res){
-  res.send('Now working');
+  res.send('it worked!');
 });
 
 /*
