@@ -2,19 +2,38 @@
  * Modules
  */
 
-import constObj from './configuration/constants';
 import express from 'express';
 import bodyParser from 'body-parser';
 import session from 'express-session';
 import cors from 'cors';
-import * as surveyRequests from './controllers/surveyRequests';
+import https from 'https';
+import fs from 'fs';
 
 /*
  * Configuration
  */
 
-var app = express(),
-  port = 9001;
+import { r } from './configuration/database.js';
+import constObj from './configuration/constants';
+
+ var app = express(),
+     credentials = {
+       key: fs.readFileSync('server/server_cert/key.pem', 'utf8'),
+       cert: fs.readFileSync('server/server_cert/cert.pem', 'utf8')
+     },
+     server = https.createServer(credentials, app),
+     port = 9001;
+
+
+/*
+ * Controllers
+ */
+
+import * as custom from './controllers/custom';
+import * as survey from './controllers/survey';
+import * as respond from './controllers/respond';
+import * as data from './controllers/data';
+import { checkToken } from './configuration/middleware';
 
 /*
  * Middleware
@@ -22,17 +41,33 @@ var app = express(),
 
 app.use(bodyParser.json());
 app.use(cors());
+// app.use(checkToken);
 
 /*
  * Routes
  */
-app.post('/api/save-survey/:userId', surveyRequests.saveSurvey)
+
+// Custom Surveys
+app.post('/api/save-survey/:userId', custom.save);
+app.get('/api/save-survey/:userId', custom.get);
+
+// Receive Responses
+app.get('/api/respond/score', respond.score);
+app.post('/api/respond/feedback', respond.feedback);
+
+// Send Survey
+app.post('/api/survey', survey.send);
+
+// Get Data
+app.get('/api/results/client', data.client);
+app.get('/api/results/total', data.total);
+
 
 /*
  * Initialize
  */
 
-app.listen(port, function() {
+server.listen(port, function() {
   console.log('listening at ' + port)
 });
 
