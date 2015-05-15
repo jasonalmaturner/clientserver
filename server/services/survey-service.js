@@ -99,27 +99,12 @@ function _saveSurvey(survey){
 function saveScore(obj){
   var dfd = q.defer();
   var survey = surveys.get(obj.survey_id);
-  /*
-  survey
-    .update({ clients:  })
-  */
-  /*
-  survey('clients')('contacts')
-    .filter(contact => contact('contact_id').match(obj.contact_id))
-    .run()
-    .then(results => {
-      console.log(results);
-    })
-  */
-
   
-  // var latestSurvey =   surveys.filter({ tenant_id: obj.tenant_id }).max('date')
-
-  //latestSurvey
   survey 
     .pluck({ clients: 'contacts' })
     .run()
     .then(results => {
+      
       results.clients.forEach((item, outerIndex) => {
         item.contacts.forEach((item, index, array) => {
           if(Number(item.contact_id) === Number(obj.contact_id)) {
@@ -128,13 +113,39 @@ function saveScore(obj){
           }
         });
       });
-      survey
-        .update(results)
-        .run()
-        .then(results =>{
-          console.log(results);
-        });
+      
+      return survey.update(results).run()
     })
+    .then(results => dfd.resolve(results))
+    .catch(err => dfd.resolve(err));
+
+  return dfd.promise;
+};
+
+
+function saveFeedback(obj){
+  var dfd = q.defer();
+  var survey = surveys.get(obj.survey_id);
+  
+  survey 
+    .pluck({ clients: 'contacts' })
+    .run()
+    .then(results => {
+      
+      results.clients.forEach((item, outerIndex) => {
+        item.contacts.forEach((item, index, array) => {
+          if(Number(item.contact_id) === Number(obj.contact_id)) {
+            array[index].feedback = obj.feedback;
+            console.log(outerIndex, index);
+          }
+        });
+      });
+      
+      return survey.update(results).run()
+    })
+    .then(results => dfd.resolve(results))
+    .catch(err => dfd.resolve(err));
+
   return dfd.promise;
 };
 
@@ -154,4 +165,4 @@ function saveScore(obj){
     }]
 */ 
 
-export { send, saveScore };
+export { send, saveScore, saveFeedback };

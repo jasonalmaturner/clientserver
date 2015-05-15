@@ -52,7 +52,7 @@ app.get('/api/save-survey/:userId', custom.get);
 
 // Receive Responses
 app.get('/api/respond/score', respond.score);
-app.get('/api/respond/feedback', respond.feedback);
+app.post('/api/respond/feedback', respond.feedback);
 
 // Send Survey
 app.post('/api/survey', survey.send);
