@@ -5,15 +5,52 @@ var surveys = r.table('surveys');
 
 function getClientData(obj){
   var dfd = q.defer();
-  console.log(obj);
+  var year = r.now().date().year(); 
   surveys
-    .filter(
-      { client_id: obj.client_id }
-    )
+    .getAll(obj.tenant_id, { index: 'tenant_id' })
+    .filter( r.row('date').year().eq(year))
     .run()
-    .then(results => dfd.resolve(results))
+    .then(res => _parseClients({ surveys: res, client_id: obj.client_id }))
+    .then(res => _calcNps(res))
+    .then(res => dfd.resolve(res))
     .catch(err => dfd.reject(err));
   return dfd.promise;
 };
+
+function _parseClients(obj){
+  var dfd = q.defer();
+  var results = [];
+
+  obj.surveys.forEach((item, index) => {
+    item.clients.forEach((item, index) => {
+      if(item.client_id == obj.client_id){
+        results = results.concat(item.contacts);
+      }
+    })
+  });
+
+  dfd.resolve(results);
+
+  return dfd.promise;
+};
+
+function _calcNps(responses){
+  var dfd = q.defer();
+  var results = {
+    promoters: [],
+    detractors: [],
+    neutrals: []
+  };
+
+  responses.forEach((item, index) => {
+    if(!item.score) return;
+    else if(item.score >= 9) results.promoters.push(item);
+    else if(item.score <= 8 && item.score >= 7) results.neutrals.push(item);
+    else if(item.score <= 6) results.detractors.push(item);
+  });
+
+  dfd.resolve(results);
+  return dfd.promise;
+}
 
 export { getClientData };
