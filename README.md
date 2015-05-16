@@ -1,6 +1,5 @@
-# clientserver
+# CS - NPS Server
 
-========
 ## Global Dependencies
  * [iojs](https://iojs.org/en/index.html)
  * [npm](https://www.npmjs.com/)
