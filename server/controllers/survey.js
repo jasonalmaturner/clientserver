@@ -9,13 +9,13 @@ function send(req, res){
       !req.query.tenant_id || 
       !Array.isArray(req.body) || 
       req.body.length < 1
-  ) { return res.status(400).send('Insufficient parameters for request') };
+  ) { return res.status(400).send('Insufficient parameters for request') }
 
   var obj = {
    access_token: req.query.access_token,
    tenant_id: req.query.tenant_id,
    clients: req.body
-  }
+  };
   
   survey.send(obj)
     .then(function(results){

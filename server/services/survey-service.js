@@ -47,7 +47,7 @@ function send(obj){
       // After saving survey to db
       response.survey = results;
       var promiseArray = survey.clients.map(function(item, index){
-        return sendSurvey({ contacts: item.contacts, client_id: item.client_id }); 
+        return sendSurvey({ contacts: item.contacts, client_id: item.client_id, tenant_id: obj.tenant_id, survey_id: results.generated_keys[0] });
       });
       return q.all(promiseArray);
     })
