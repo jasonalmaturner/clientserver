@@ -91,11 +91,7 @@ function _getQuarter(current){
     month = month - 1;
     if(!last) return new Date(year, month, day);
     else return new Date(year, month, day, 23, 59, 59);
-    // Needs to be 23:59:59 if the last day of the year;
   }
-  
-
-  console.log(results);
 }
 
 function _calcNps(responses){
