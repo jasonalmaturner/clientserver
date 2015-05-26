@@ -61,7 +61,7 @@ function sendSurvey(obj){
                       postmark.send({
                         From: "Daniel Kesler <jacob.turner@devmounta.in>",
                         To: "j.israel.turner@gmail.com",
-                        Subject: "Rate us",
+                        Subject: `How likely are you to recommend ${data.company} to a friend?`,
                         HtmlBody: html
                       }, function(err, response){
                         if(err){
