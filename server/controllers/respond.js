@@ -8,7 +8,9 @@ function score(req, res){
   ) return res.status(400).send('insufficient parameters');
   else {
    saveScore(req.query)
-    .then(response => res.json(response)) // We need to change this to a redirect to the landing/feedback page.
+    .then(response => {
+      res.redirect(`/feedback/${req.query.survey_id}`);
+    }) // We need to change this to a redirect to the landing/feedback page.
     .catch(err => res.status(500).json(err));
   }
 };

@@ -60,7 +60,7 @@ function sendSurvey(obj){
                     } else {
                       postmark.send({
                         From: "Daniel Kesler <jacob.turner@devmounta.in>",
-                        To: "danielckesler@gmail.com",
+                        To: "j.israel.turner@gmail.com",
                         Subject: "Rate us",
                         HtmlBody: html
                       }, function(err, response){

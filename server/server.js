@@ -43,6 +43,10 @@ app.use(bodyParser.json());
 app.use(cors());
 // app.use(checkToken);
 
+
+// Serve public folder
+app.use('/feedback/:survey_id', express.static(`${__dirname}/../public`));
+
 /*
  * Routes
  */
@@ -50,6 +54,7 @@ app.use(cors());
 // Custom Surveys
 app.post('/api/save-survey/:userId', custom.save);
 app.get('/api/save-survey/:userId', custom.get);
+app.get('/api/save-survey', custom.getNoUser);
 
 // Receive Responses
 app.get('/api/respond/score', respond.score);
@@ -61,6 +66,7 @@ app.post('/api/survey', survey.send);
 // Get Data
 app.get('/api/results/client', data.client);
 app.get('/api/results/total', data.total);
+
 
 
 /*
