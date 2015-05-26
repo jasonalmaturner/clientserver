@@ -6,10 +6,21 @@ var surveys = r.table('surveys');
 function getResults(obj){
   var dfd = q.defer();
   var year = r.now().date().year(); 
-  var quarter = _getQuarter(obj.current);
+  var quarter = _getQuarters(obj.current);
   surveys
     .getAll(obj.tenant_id, { index: 'tenant_id' })
     .filter( r.row('date').year().eq(year))
+    .filter( r.row('date').during(r.time(
+      quarter.current.from.getFullYear(),
+      quarter.current.from.getMonth() + 1,
+      quarter.current.from.getDate(),
+      '-06:00'
+    ), r.time(
+      quarter.current.to.getFullYear(),
+      quarter.current.to.getMonth() + 1,
+      quarter.current.from.getDate(),
+      '-06:00'
+    )))
     .run()
     .then(res => _parseContacts({ surveys: res, client_id: obj.client_id }))
     .then(res => _calcNps(res))
@@ -37,7 +48,7 @@ function _parseContacts(obj){
   return dfd.promise;
 };
 
-function _getQuarter(current){
+function _getQuarters(current){
   var year = new Date().getFullYear();
   var month = new Date().getMonth() + 1;
   var results = {
@@ -50,7 +61,6 @@ function _getQuarter(current){
       to: null
     }
   }
- 
 
   switch (month){
     case 1 :
@@ -86,6 +96,8 @@ function _getQuarter(current){
       results.previous.to = makeDate(true, 9,30,year);
       break;
   }
+
+  return results;
 
   function makeDate(last, month, day, year){
     month = month - 1;

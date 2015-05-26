@@ -148,6 +148,16 @@ function saveFeedback(obj){
   return dfd.promise;
 };
 
+function getSurvey(obj){
+  var dfd = q.defer();
+  surveys.get(obj.survey_id)
+    .run()
+    .then(res => {
+      dfd.resolve(res);
+    });
+  return dfd.promise;
+}
+
 /*
  
   Survey:
@@ -164,4 +174,4 @@ function saveFeedback(obj){
     }]
 */ 
 
-export { send, saveScore, saveFeedback };
+export { send, saveScore, saveFeedback, getSurvey };

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel='stylesheet' href='desk-directive/deskPreview.css'>
+  </head>
+  <body ng-app='csFeedback' ng-controller='commentsCtrl as comments'>
+    
+    <div class="comments">
+      <desk-preview comment-box="true" no-email="true" preview="comments.preview" submit-comment='comments.commentSubmit(comment)'></desk-preview>
+    </div>
+
+
+
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.15/angular.min.js'></script>
+    <script src='app.js'></script>
+    <script src='data-service.js'></script>
+    <script src='comments/comments.js'></script>
+    <script src='desk-directive/deskPreview.js'></script>
+  </body>
+</html>

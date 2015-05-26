@@ -1,0 +1,20 @@
+<div class="deskPreview">
+  <div class="previewBody">
+    <div class="logoBox">
+      <div ng-style="desk.preview.topBar"></div>
+      <img src="http://startupweekend.org/wp-content/blogs.dir/1/files/2013/04/CokeLogo1.png">
+    </div>
+    <div ng-show="desk.commentBox" class="commentsBox">
+      <p class="commentsBox__title">Tell us a bit more about why you chose what you did?</p>
+      <form ng-submit="desk.submit(desk.comment)" class="commentsBox__form">
+        <textarea ng-model="desk.comment"></textarea>
+        <button ng-style="desk.preview.button">Submit</button>
+      </form>
+    </div>
+    <div ng-show="desk.commentBox" class="previewBody__footer--commentBox">
+      <div>
+        Powered by <a href="http://www.clientsuccess.com/"><span>ClientSuccess</span></a>
+      </div>
+    </div>
+  </div>
+</div>
