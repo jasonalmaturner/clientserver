@@ -51,6 +51,7 @@ function _parseContacts(obj){
 function _getQuarters(current){
   var year = new Date().getFullYear();
   var month = new Date().getMonth() + 1;
+  if(current === false) month -= 3; 
   var results = {
     current: {
       from: null,
