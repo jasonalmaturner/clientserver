@@ -6,7 +6,7 @@ var surveys = r.table('surveys');
 function getResults(obj){
   var dfd = q.defer();
   var year = r.now().date().year(); 
-  var quarter = _getQuarters(obj.current);
+  var quarter = _getQuarters(obj.offset);
   surveys
     .getAll(obj.tenant_id, { index: 'tenant_id' })
     .filter( r.row('date').year().eq(year))
@@ -48,10 +48,16 @@ function _parseContacts(obj){
   return dfd.promise;
 };
 
-function _getQuarters(current){
+function _getQuarters(offset){
   var year = new Date().getFullYear();
   var month = new Date().getMonth() + 1;
-  if(current === false) month -= 3; 
+  if(offset) {
+    if(month > 3 * offset) month -= 3 * offset; // if the offset will still remain in this year
+    else {
+      month += (12 - offset * 3); 
+      year--;
+    }// if the month must be set back to last year
+  }
   var results = {
     current: {
       from: null,
