@@ -7,6 +7,7 @@ function getResults(obj){
   var dfd = q.defer();
   var year = r.now().date().year(); 
   var quarter = _getQuarters(obj.offset);
+  console.log(quarter);
   surveys
     .getAll(obj.tenant_id, { index: 'tenant_id' })
     .filter( r.row('date').year().eq(year))
@@ -18,7 +19,7 @@ function getResults(obj){
     ), r.time(
       quarter.current.to.getFullYear(),
       quarter.current.to.getMonth() + 1,
-      quarter.current.from.getDate(),
+      quarter.current.to.getDate(),
       '-06:00'
     )))
     .run()
@@ -30,6 +31,7 @@ function getResults(obj){
 };
 
 function _parseContacts(obj){
+  console.log(obj);
   var dfd = q.defer();
   var results = [];
   var total = 0;
@@ -114,7 +116,6 @@ function _getQuarters(offset){
 }
 
 function _calcNps(responses){
-  console.log(responses.total);
   var dfd = q.defer();
   var results = {
     promoters: [],

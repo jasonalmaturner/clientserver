@@ -37,7 +37,7 @@ function send(obj){
       results.forEach(function(item, index){
         // Merge contacts into clients
         item = item.map(function(item, index){
-          return { contact_id: item.id, score: null, feedback: null, email: item.email, last_modified: new Date() };
+          return { contact_id: item.id, score: null, feedback: null, email: item.email, last_modified: new Date(), firstName: item.firstName, lastName: item.lastName, preferredName: item.preferredName };
         });
         survey.clients[index].contacts = item;
       });
