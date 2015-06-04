@@ -32,9 +32,10 @@ function getResults(obj){
 function _parseContacts(obj){
   var dfd = q.defer();
   var results = [];
-
+  var total = 0;
   obj.surveys.forEach((item, index) => {
     item.clients.forEach((item, index) => {
+      total += item.contacts.length;
       if(obj.client_id && item.client_id == obj.client_id){
         results = results.concat(item.contacts);
       } else if (!obj.client_id){
@@ -42,9 +43,8 @@ function _parseContacts(obj){
       }
     })
   });
-
+  results.total = total;
   dfd.resolve(results);
-
   return dfd.promise;
 };
 
@@ -114,11 +114,13 @@ function _getQuarters(offset){
 }
 
 function _calcNps(responses){
+  console.log(responses.total);
   var dfd = q.defer();
   var results = {
     promoters: [],
     detractors: [],
-    neutrals: []
+    neutrals: [],
+    totalSent: responses.total
   };
 
   responses.forEach((item, index) => {
