@@ -19,10 +19,11 @@ void function(angular){
 
     this.submitFeedback = function(comment){
       var survey_id = window.location.pathname.split('/')[2];
+      var contact_id = window.location.search.split('=')[1];
       var dfd = $q.defer();
       $http({
         method: 'POST',
-        url: '/api/respond/feedback?survey_id=' + survey_id,
+        url: '/api/respond/feedback?survey_id=' + survey_id + '&contact_id=' + contact_id,
         data: { feedback: comment }
       })
       .then(function(response){
