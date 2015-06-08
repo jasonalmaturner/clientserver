@@ -7,6 +7,7 @@ function getResults(obj){
   var dfd = q.defer();
   var year = r.now().date().year(); 
   var quarter = _getQuarters(obj.offset);
+  console.log(quarter);
   surveys
     .getAll(obj.tenant_id, { index: 'tenant_id' })
     .filter( r.row('date').year().eq(year))
@@ -18,7 +19,7 @@ function getResults(obj){
     ), r.time(
       quarter.current.to.getFullYear(),
       quarter.current.to.getMonth() + 1,
-      quarter.current.from.getDate(),
+      quarter.current.to.getDate(),
       '-06:00'
     )))
     .run()
@@ -30,11 +31,13 @@ function getResults(obj){
 };
 
 function _parseContacts(obj){
+  console.log(obj);
   var dfd = q.defer();
   var results = [];
-
+  var total = 0;
   obj.surveys.forEach((item, index) => {
     item.clients.forEach((item, index) => {
+      total += item.contacts.length;
       if(obj.client_id && item.client_id == obj.client_id){
         results = results.concat(item.contacts);
       } else if (!obj.client_id){
@@ -42,9 +45,8 @@ function _parseContacts(obj){
       }
     })
   });
-
+  results.total = total;
   dfd.resolve(results);
-
   return dfd.promise;
 };
 
@@ -118,7 +120,8 @@ function _calcNps(responses){
   var results = {
     promoters: [],
     detractors: [],
-    neutrals: []
+    neutrals: [],
+    totalSent: responses.total
   };
 
   responses.forEach((item, index) => {
