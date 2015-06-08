@@ -9,7 +9,7 @@ function score(req, res){
   else {
    saveScore(req.query)
     .then(response => {
-      res.redirect(`/feedback/${req.query.survey_id}`);
+      res.redirect(`/feedback/${req.query.survey_id}?contact_id=${req.query.contact_id}`);
     }) // We need to change this to a redirect to the landing/feedback page.
     .catch(err => res.status(500).json(err));
   }
